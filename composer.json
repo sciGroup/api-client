@@ -1,0 +1,25 @@
+{
+    "name": "",
+    "license": "MIT",
+    "type": "project",
+    "autoload": {
+        "psr-4": { "Sci\\API\\Client\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Tests\\": "tests/" }
+    },
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "dev-master",
+        "phpunit/phpunit": "~5.7.1",
+        "phploc/phploc": "^4.0"
+    },
+    "config": {
+        "bin-dir": "bin",
+        "github-oauth": {
+            "github.com": "0a7b9c6c4de55931800890cf905996f7ee7dacb2"
+        }
+    }
+}
