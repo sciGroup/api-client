@@ -6,6 +6,9 @@
 
 namespace Sci\API\Client\Token\Storage;
 
+/**
+ * Persistent storage for a token.
+ */
 interface TokenStorageInterface
 {
     /**

@@ -6,6 +6,7 @@
 
 namespace Sci\API\Client;
 
+use Sci\API\Client\HTTPTransport\HTTPTransportInterface;
 use Sci\API\Client\Token\OAuthAuthenticator;
 
 class Client
@@ -15,9 +16,15 @@ class Client
      */
     private $authenticator;
 
-    public function __construct(OAuthAuthenticator $authenticator)
+    /**
+     * @var HTTPTransportInterface
+     */
+    private $transport;
+
+    public function __construct(OAuthAuthenticator $authenticator, HTTPTransportInterface $transport)
     {
         $this->authenticator = $authenticator;
+        $this->transport = $transport;
     }
 
     public function eventSearch(string $query): array

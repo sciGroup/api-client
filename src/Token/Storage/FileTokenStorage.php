@@ -27,25 +27,15 @@ class FileTokenStorage implements TokenStorageInterface
 
     public function set($value)
     {
-        file_put_contents($this->filePath, serialize($value)."\n", FILE_APPEND | LOCK_EX);
+        file_put_contents($this->filePath, serialize($value), LOCK_EX);
     }
 
     public function get()
     {
-        $fp = fopen($this->filePath, 'r');
-        fseek($fp, -1, SEEK_END);
-        $pos = ftell($fp);
-        $lastLine = null;
-        while((($c = fgetc($fp)) != "\n") && ($pos > 0)) {
-            $lastLine = $c.$lastLine;
-            fseek($fp, $pos--);
-        }
-        fclose($fp);
-
-        if ($lastLine) {
-            return unserialize($lastLine);
+        if ($data = file_get_contents($this->filePath)) {
+            return unserialize($data);
         }
 
-        return $lastLine;
+        return null;
     }
 }

@@ -24,35 +24,29 @@ class OAuthAuthenticator
     /**
      * @var TokenStorageInterface
      */
-    private $storage;
-
-    /**
-     * @var string Used as a key to store token data
-     */
-    private $tokenKey;
+    private $tokenStorage;
 
     /**
      * @var HTTPTransportInterface
      */
     private $transport;
 
-    public function __construct(string $clientId, string $clientSecret, TokenStorageInterface $storage, string $tokenKey, HTTPTransportInterface $transport)
+    public function __construct(string $clientId, string $clientSecret, TokenStorageInterface $tokenStorage, HTTPTransportInterface $transport)
     {
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
-        $this->storage = $storage;
-        $this->tokenKey = $tokenKey;
+        $this->tokenStorage = $tokenStorage;
         $this->transport = $transport;
     }
 
     public function getToken(): OAuthToken
     {
         /** @var OAuthToken $token */
-        if ($token = $this->storage->get($this->tokenKey)) {
+        if ($token = $this->tokenStorage->get()) {
             if (!$token->isValid()) {
                 if ($refreshToken = $token->getRefreshToken()) {
                     $token = $this->refreshToken($refreshToken);
-                    $this->storage->set($this->tokenKey, $token);
+                    $this->tokenStorage->set($token);
 
                     return $token;
                 }
@@ -62,7 +56,7 @@ class OAuthAuthenticator
         }
 
         $token = $this->authenticate();
-        $this->storage->set($this->tokenKey, $token);
+        $this->tokenStorage->set($token);
 
         return $token;
     }
