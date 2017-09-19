@@ -35,6 +35,11 @@ final class OAuthToken
     private $refreshToken;
 
     /**
+     * @var int Unix timestamp
+     */
+    private $issuedAt;
+
+    /**
      * OAuthToken constructor.
      * @param string $accessToken
      * @param string $refreshToken
@@ -49,6 +54,7 @@ final class OAuthToken
         $this->expiresIn = $expiresIn;
         $this->tokenType = $tokenType;
         $this->scope = $scope;
+        $this->issuedAt = time();
     }
 
     /**
@@ -57,6 +63,14 @@ final class OAuthToken
     public function getAccessToken(): string
     {
         return $this->accessToken;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRefreshToken(): string
+    {
+        return $this->refreshToken;
     }
 
     /**
@@ -84,10 +98,10 @@ final class OAuthToken
     }
 
     /**
-     * @return string
+     * @return bool
      */
-    public function getRefreshToken(): string
+    public function isValid(): bool
     {
-        return $this->refreshToken;
+        return $this->issuedAt + $this->expiresIn > time();
     }
 }

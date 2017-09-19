@@ -25,9 +25,9 @@ class FileStorage implements StorageInterface
         $this->filePath = $filePath;
     }
 
-    public function set(string $name, string $value, int $validUntil)
+    public function set(string $name, $value)
     {
-        file_put_contents($this->filePath, $name . ':' . serialize(['value' => $value, 'valid_until' => $validUntil]), FILE_APPEND | LOCK_EX);
+        file_put_contents($this->filePath, $name . ':' . serialize($value), FILE_APPEND | LOCK_EX);
     }
 
     public function get(string $name)
@@ -64,17 +64,10 @@ class FileStorage implements StorageInterface
                 }
 
                 if ($charCounter > 1) {
-                    if (!$newLine) echo "\n";
-
                     $line = readNotSeek($f, $charCounter);
-                    list($key, $value) = explode(':', $line);
+                    list($key, $value) = explode(':', $line, 2);
                     if ($key == $name) {
-                        $value = unserialize($value);
-                        if ($value['valid_until'] > time()) {
-                            return $value['value'];
-                        } else {
-                            return null;
-                        }
+                        return unserialize($value);
                     }
                 }
 

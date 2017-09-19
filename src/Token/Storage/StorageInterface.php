@@ -10,14 +10,13 @@ interface StorageInterface
 {
     /**
      * @param string $name
-     * @param string $value
-     * @param int $validUntil Unix timestamp
+     * @param mixed $value The value to serialize
      */
-    public function set(string $name, string $value, int $validUntil);
+    public function set(string $name, $value);
 
     /**
      * @param string $name
-     * @return string|null
+     * @return mixed|null Unserialized value
      */
     public function get(string $name);
 }

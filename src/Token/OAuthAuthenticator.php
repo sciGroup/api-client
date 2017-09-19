@@ -6,6 +6,7 @@
 
 namespace Sci\API\Client\Token;
 
+use Sci\API\Client\HTTPTransport\HTTPTransportInterface;
 use Sci\API\Client\Token\Storage\StorageInterface;
 
 class OAuthAuthenticator
@@ -30,18 +31,42 @@ class OAuthAuthenticator
      */
     private $tokenKey;
 
-    public function __construct(string $clientId, string $clientSecret, StorageInterface $storage, string $tokenKey)
+    /**
+     * @var HTTPTransportInterface
+     */
+    private $transport;
+
+    public function __construct(string $clientId, string $clientSecret, StorageInterface $storage, string $tokenKey, HTTPTransportInterface $transport)
     {
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->storage = $storage;
         $this->tokenKey = $tokenKey;
+        $this->transport = $transport;
     }
 
-    public function getToken(): string
+    public function getToken(): OAuthToken
     {
+        /** @var OAuthToken $token */
         if ($token = $this->storage->get($this->tokenKey)) {
-            
+            if (!$token->isValid()) {
+                
+            }
+
+            return $token;
         }
+
+        
+    }
+
+    private function authenticate(): OAuthToken
+    {
+        $URI = sprintf('https://api.lomonosov-msu.ru/oauth/v2/token?client_id=%s&client_secret=%s&grant_type=client_credentials', $this->clientId, $this->clientSecret);
+        $response = $this->transport->get($URI);
+    }
+
+    private function refreshToken(string $refreshToken): OAuthToken
+    {
+
     }
 }
