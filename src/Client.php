@@ -6,18 +6,18 @@
 
 namespace Sci\API\Client;
 
-use Sci\API\Client\Token\OAuthToken;
+use Sci\API\Client\Token\OAuthAuthenticator;
 
 class Client
 {
     /**
-     * @var OAuthToken
+     * @var OAuthAuthenticator
      */
-    private $token;
+    private $authenticator;
 
-    public function __construct(OAuthToken $token)
+    public function __construct(OAuthAuthenticator $authenticator)
     {
-        $this->token = $token;
+        $this->authenticator = $authenticator;
     }
 
     public function eventSearch(string $query): array

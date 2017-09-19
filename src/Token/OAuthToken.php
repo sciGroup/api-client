@@ -1,39 +1,93 @@
 <?php
 /**
  * (c) Artem Ostretsov <artem@ostretsov.ru>
- * Created at 18.09.17 18:53.
+ * Created at 19.09.17 10:23.
  */
 
 namespace Sci\API\Client\Token;
 
-use Sci\API\Client\Token\Storage\StorageInterface;
 
-class OAuthToken
+final class OAuthToken
 {
     /**
      * @var string
      */
-    private $clientId;
+    private $accessToken;
+
+    /**
+     * @var int
+     */
+    private $expiresIn;
 
     /**
      * @var string
      */
-    private $clientSecret;
+    private $tokenType;
 
     /**
-     * @var StorageInterface
+     * @var string|null
      */
-    private $storage;
+    private $scope;
 
-    public function __construct(string $clientId, string $clientSecret, StorageInterface $storage)
+    /**
+     * @var string
+     */
+    private $refreshToken;
+
+    /**
+     * OAuthToken constructor.
+     * @param string $accessToken
+     * @param string $refreshToken
+     * @param int $expiresIn
+     * @param string $tokenType
+     * @param null|string $scope
+     */
+    public function __construct($accessToken, $refreshToken, $expiresIn, $tokenType, $scope = null)
     {
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
-        $this->storage = $storage;
+        $this->accessToken = $accessToken;
+        $this->refreshToken = $refreshToken;
+        $this->expiresIn = $expiresIn;
+        $this->tokenType = $tokenType;
+        $this->scope = $scope;
     }
 
-    public function getToken(): string
+    /**
+     * @return string
+     */
+    public function getAccessToken(): string
     {
-        return '';
+        return $this->accessToken;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExpiresIn(): int
+    {
+        return $this->expiresIn;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTokenType(): string
+    {
+        return $this->tokenType;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getScope()
+    {
+        return $this->scope;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRefreshToken(): string
+    {
+        return $this->refreshToken;
     }
 }
