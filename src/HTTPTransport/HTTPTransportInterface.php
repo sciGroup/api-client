@@ -10,5 +10,5 @@ use Psr\Http\Message\ResponseInterface;
 
 interface HTTPTransportInterface
 {
-    public function get(string $URI): ResponseInterface;
+    public function get(string $URI, $headers = []): ResponseInterface;
 }

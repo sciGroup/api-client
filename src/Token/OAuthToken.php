@@ -56,6 +56,11 @@ final class OAuthToken
         $this->issuedAt = time();
     }
 
+    public function __toString()
+    {
+        return $this->accessToken;
+    }
+
     /**
      * @return string
      */

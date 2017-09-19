@@ -7,6 +7,7 @@
 namespace Sci\API\Client;
 
 use Sci\API\Client\HTTPTransport\HTTPTransportInterface;
+use Sci\API\Client\Model\Request\Event\EventSearchRequest;
 use Sci\API\Client\Token\OAuthAuthenticator;
 
 class Client
@@ -27,8 +28,8 @@ class Client
         $this->transport = $transport;
     }
 
-    public function eventSearch(string $query): array
+    public function eventSearch(EventSearchRequest $request): array
     {
-
+        $response = $this->transport->get($request->getQuery(), ['HTTP_Authorization' => 'Bearer '.$this->authenticator->getToken()]);
     }
 }
