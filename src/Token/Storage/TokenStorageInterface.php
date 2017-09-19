@@ -6,17 +6,15 @@
 
 namespace Sci\API\Client\Token\Storage;
 
-interface StorageInterface
+interface TokenStorageInterface
 {
     /**
-     * @param string $name
      * @param mixed $value The value to serialize
      */
-    public function set(string $name, $value);
+    public function set($value);
 
     /**
-     * @param string $name
      * @return mixed|null Unserialized value
      */
-    public function get(string $name);
+    public function get();
 }

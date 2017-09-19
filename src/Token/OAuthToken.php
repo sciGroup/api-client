@@ -30,7 +30,7 @@ final class OAuthToken
     private $scope;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $refreshToken;
 
@@ -40,20 +40,19 @@ final class OAuthToken
     private $issuedAt;
 
     /**
-     * OAuthToken constructor.
      * @param string $accessToken
-     * @param string $refreshToken
      * @param int $expiresIn
      * @param string $tokenType
      * @param null|string $scope
+     * @param string $refreshToken
      */
-    public function __construct($accessToken, $refreshToken, $expiresIn, $tokenType, $scope = null)
+    public function __construct($accessToken, $expiresIn, $tokenType, $scope = null, $refreshToken = null)
     {
         $this->accessToken = $accessToken;
-        $this->refreshToken = $refreshToken;
         $this->expiresIn = $expiresIn;
         $this->tokenType = $tokenType;
         $this->scope = $scope;
+        $this->refreshToken = $refreshToken;
         $this->issuedAt = time();
     }
 
@@ -63,14 +62,6 @@ final class OAuthToken
     public function getAccessToken(): string
     {
         return $this->accessToken;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRefreshToken(): string
-    {
-        return $this->refreshToken;
     }
 
     /**
@@ -95,6 +86,14 @@ final class OAuthToken
     public function getScope()
     {
         return $this->scope;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRefreshToken()
+    {
+        return $this->refreshToken;
     }
 
     /**
