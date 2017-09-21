@@ -34,7 +34,7 @@ class EventSearchRequest implements RequestInterface
     /** @var int */
     public $limit = 10;
 
-    public function getQuery(string $relativeTo): string
+    public function getQueryString(string $relativeTo): string
     {
         if (!$this->locale) {
             throw new \LogicException(sprintf('Locale must be set before %s method call!', __METHOD__));

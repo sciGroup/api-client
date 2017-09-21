@@ -6,10 +6,23 @@
 
 namespace Sci\API\Client\Model\Wrapper;
 
+use Sci\API\Client\Model\Event\Event;
+
 class EventSearchResponseWrapper
 {
+    /**
+     * @var int
+     */
     private $hits;
+
+    /**
+     * @var bool
+     */
     private $strict;
+
+    /**
+     * @var Event[]
+     */
     private $events;
 
     public function __construct($hits, $strict, $events)

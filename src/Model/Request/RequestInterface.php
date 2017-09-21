@@ -8,5 +8,5 @@ namespace Sci\API\Client\Model\Request;
 
 interface RequestInterface
 {
-    public function getQuery(string $relativeTo): string;
+    public function getQueryString(string $relativeTo): string;
 }
