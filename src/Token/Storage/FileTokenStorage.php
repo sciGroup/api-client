@@ -18,10 +18,6 @@ class FileTokenStorage implements TokenStorageInterface
 
     public function __construct(string $filePath)
     {
-        if (!file_exists($filePath)) {
-            throw new \InvalidArgumentException(sprintf('File %s does not exist!', $filePath));
-        }
-
         $this->filePath = $filePath;
     }
 
