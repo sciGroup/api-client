@@ -19,9 +19,6 @@
     },
     "minimum-stability": "dev",
     "config": {
-        "bin-dir": "bin",
-        "github-oauth": {
-            "github.com": "0a7b9c6c4de55931800890cf905996f7ee7dacb2"
-        }
+        "bin-dir": "bin"
     }
 }
