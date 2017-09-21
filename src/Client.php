@@ -8,12 +8,14 @@ namespace Sci\API\Client;
 
 use Sci\API\Client\HTTPTransport\HTTPTransportInterface;
 use Sci\API\Client\Model\Request\Event\EventSearchRequest;
+use Sci\API\Client\Model\ResponseTransformer\EventSearchResponseTransformer;
+use Sci\API\Client\Model\Wrapper\EventSearchResponseWrapper;
 use Sci\API\Client\Token\OAuthAuthenticator;
 
 class Client
 {
     /**
-     * @var string
+     * @var string Without trailing slash
      */
     private $basePath;
 
@@ -34,9 +36,11 @@ class Client
         $this->transport = $transport;
     }
 
-    public function eventSearch(EventSearchRequest $request): array
+    public function eventSearch(EventSearchRequest $request): EventSearchResponseWrapper
     {
         $rawResponse = $this->transport->get($request->getQuery($this->basePath), ['HTTP_Authorization' => 'Bearer '.$this->authenticator->getToken()]);
+        $transformer = new EventSearchResponseTransformer();
 
+        return $transformer->transform($rawResponse);
     }
 }

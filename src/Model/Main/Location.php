@@ -16,4 +16,19 @@ class Location
 
     /** @var Location */
     public $parent;
+
+    public function getFullName($glue = ', ', $unique = true): string
+    {
+        $currentLocation = $this;
+        do {
+            $n[] = $currentLocation->title;
+            $currentLocation = $currentLocation->parent;
+        } while (null !== $currentLocation);
+
+        if ($unique) {
+            $n = array_unique($n);
+        }
+
+        return implode($glue, $n);
+    }
 }

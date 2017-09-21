@@ -9,6 +9,7 @@ namespace Tests\Model\ResponseTransformer;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
+use Sci\API\Client\Model\Main\Location;
 use Sci\API\Client\Model\ResponseTransformer\EventSearchResponseTransformer;
 use Sci\API\Client\Model\Wrapper\EventSearchResponseWrapper;
 
@@ -30,6 +31,32 @@ class EventSearchResponseTransformerTest extends TestCase
         $object = $transformer->transform($responseMock);
 
         $this->assertInstanceOf(EventSearchResponseWrapper::class, $object);
+        $this->assertSame(85, $object->getHits());
+        $this->assertSame(true, $object->getStrict());
+        $this->assertCount(2, $object->getEvents());
+
+        // check first event
+        $firstEvent = $object->getEvents()[0];
+        $this->assertSame(4435, $firstEvent->id);
+        $this->assertSame('https://foobarhost/rus/event/4435/', $firstEvent->defaultDomainLink);
+        $this->assertSame('Конференция', $firstEvent->typeString);
+        $this->assertSame('Только очная форма', $firstEvent->attendanceType);
+        $this->assertSame('КИМО-2018', $firstEvent->shortName);
+        $this->assertSame('III Всероссийская научная конференция молодых ученых «Комплексные исследования Мирового океана»', $firstEvent->fullName);
+        $this->assertEquals(new \DateTime('2017-09-01 00:00:00.000000'), $firstEvent->registrationStartDate);
+        $this->assertEquals(new \DateTime('2017-11-15 00:00:00.000000'), $firstEvent->registrationEndDate);
+        $this->assertEquals(new \DateTime('2018-05-21 09:00:00.000000'), $firstEvent->eventStartDate);
+        $this->assertEquals(new \DateTime('2018-05-25 17:00:00.000000'), $firstEvent->eventEndDate);
+        $this->assertTrue($firstEvent->isRegistrationOpened);
+        $this->assertInstanceOf(Location::class, $firstEvent->location);
+
+        // check location
+        /** @var Location $location */
+        $location = $firstEvent->location;
+        $this->assertSame(820, $location->id);
+        $this->assertSame('Санкт-Петербург', $location->title);
+        $this->assertInstanceOf(Location::class, $firstEvent->location);
+        $this->assertSame('Санкт-Петербург, Россия', $location->getFullName());
     }
 
     private function getResponseBody(): string
@@ -41,7 +68,7 @@ class EventSearchResponseTransformerTest extends TestCase
    "events": [
       {
          "id": 4435,
-         "default_domain_link": "https://lomonosov-msu.ru/rus/event/4435/",
+         "default_domain_link": "https://foobarhost/rus/event/4435/",
          "type": {
             "id": 1
          },
@@ -91,7 +118,7 @@ class EventSearchResponseTransformerTest extends TestCase
       },
       {
          "id": 4407,
-         "default_domain_link": "https://lomonosov-msu.ru/rus/event/4407/",
+         "default_domain_link": "https://foobarhost/rus/event/4407/",
          "type": {
             "id": 1
          },

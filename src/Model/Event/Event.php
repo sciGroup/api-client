@@ -31,10 +31,10 @@ class Event
     /** @var string */
     public $logo;
 
-    /** @var \DateTime */
+    /** @var \DateTime|null */
     public $registrationStartDate;
 
-    /** @var \DateTime */
+    /** @var \DateTime|null */
     public $registrationEndDate;
 
     /** @var \DateTime */
