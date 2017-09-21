@@ -13,6 +13,11 @@ use Sci\API\Client\Token\OAuthAuthenticator;
 class Client
 {
     /**
+     * @var string
+     */
+    private $basePath;
+
+    /**
      * @var OAuthAuthenticator
      */
     private $authenticator;
@@ -22,14 +27,16 @@ class Client
      */
     private $transport;
 
-    public function __construct(OAuthAuthenticator $authenticator, HTTPTransportInterface $transport)
+    public function __construct(string $basePath, OAuthAuthenticator $authenticator, HTTPTransportInterface $transport)
     {
+        $this->basePath = $basePath;
         $this->authenticator = $authenticator;
         $this->transport = $transport;
     }
 
     public function eventSearch(EventSearchRequest $request): array
     {
-        $response = $this->transport->get($request->getQuery(), ['HTTP_Authorization' => 'Bearer '.$this->authenticator->getToken()]);
+        $rawResponse = $this->transport->get($request->getQuery($this->basePath), ['HTTP_Authorization' => 'Bearer '.$this->authenticator->getToken()]);
+
     }
 }
