@@ -17,7 +17,6 @@
         "phpunit/phpunit": "~5.7.1",
         "phploc/phploc": "^4.0"
     },
-    "minimum-stability": "dev",
     "config": {
         "bin-dir": "bin"
     }
