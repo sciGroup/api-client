@@ -28,6 +28,10 @@ class FileTokenStorage implements TokenStorageInterface
 
     public function get()
     {
+        if (!file_exists($this->filePath)) {
+            return null;
+        }
+
         if ($data = file_get_contents($this->filePath)) {
             return unserialize($data);
         }

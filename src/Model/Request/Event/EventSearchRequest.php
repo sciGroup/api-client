@@ -48,6 +48,6 @@ class EventSearchRequest implements RequestInterface
         $data['page'] = $this->page ?: 1;
         $data['limit'] = $this->limit ?: 10;
 
-        return $relativeTo.sprintf('/open-api/v1/%s/event/events', $this->locale).http_build_query($data);
+        return $relativeTo.sprintf('/open-api/v1/%s/event/events', $this->locale).'?'.http_build_query($data);
     }
 }
