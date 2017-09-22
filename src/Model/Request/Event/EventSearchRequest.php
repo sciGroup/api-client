@@ -43,8 +43,8 @@ class EventSearchRequest implements RequestInterface
         $data['text'] = $this->query ?: null;
         $data['startDate'] = $this->startDate instanceof \DateTime ? $this->startDate->format('Y-m-d') : null;
         $data['endDate'] = $this->endDate instanceof \DateTime ? $this->endDate->format('Y-m-d') : null;
-        $data['isNotOnlyUpcoming'] = $this->isNotOnlyUpcoming ?: true;
-        $data['registrationStatus'] = $this->isRegistrationOpened ? 1 : 0;
+        $data['isNotOnlyUpcoming'] = $this->isNotOnlyUpcoming ? 1 : null;
+        $data['registrationStatus'] = $this->isRegistrationOpened ? 1 : null;
         $data['page'] = $this->page ?: 1;
         $data['limit'] = $this->limit ?: 10;
 
