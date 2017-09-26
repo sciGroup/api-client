@@ -38,7 +38,7 @@ class Client
 
     public function eventSearch(EventSearchRequest $request): EventSearchResponseWrapper
     {
-        $rawResponse = $this->transport->get($request->getQueryString($this->basePath), ['Authorization' => 'Bearer '.$this->authenticator->getToken()]);
+        $rawResponse = $this->transport->get($request->getQueryString($this->basePath).'?access_token='.$this->authenticator->getToken());
         $transformer = new EventSearchResponseTransformer();
 
         return $transformer->transform($rawResponse);
