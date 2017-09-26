@@ -9,6 +9,6 @@
 
 ```
 // Implement HTTPTransportInterface interface
-$authenticator = new OAuthAuthenticator('client_id', 'client_secret', new FileTokenStorage(), $HTTPTransport);
+$authenticator = new OAuthAuthenticator('https://base/path/to/auth/endpoint', 'client_id', 'client_secret', new FileTokenStorage(), $HTTPTransport);
 $client = new Client('https://base/path', $authenticator, $HTTPTransport);
 ```  

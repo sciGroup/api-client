@@ -14,6 +14,11 @@ class OAuthAuthenticator
     /**
      * @var string
      */
+    private $basePath;
+
+    /**
+     * @var string
+     */
     private $clientId;
 
     /**
@@ -31,8 +36,9 @@ class OAuthAuthenticator
      */
     private $transport;
 
-    public function __construct(string $clientId, string $clientSecret, TokenStorageInterface $tokenStorage, HTTPTransportInterface $transport)
+    public function __construct(string $basePath, string $clientId, string $clientSecret, TokenStorageInterface $tokenStorage, HTTPTransportInterface $transport)
     {
+        $this->basePath = $basePath;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->tokenStorage = $tokenStorage;
@@ -63,14 +69,14 @@ class OAuthAuthenticator
 
     private function authenticate(): OAuthToken
     {
-        $URI = sprintf('https://api.lomonosov-msu.ru/oauth/v2/token?client_id=%s&client_secret=%s&grant_type=client_credentials', $this->clientId, $this->clientSecret);
+        $URI = sprintf('%s/oauth/v2/token?client_id=%s&client_secret=%s&grant_type=client_credentials', $this->basePath, $this->clientId, $this->clientSecret);
 
         return (new OAuthTokenFactory())->getToken($this->transport->get($URI));
     }
 
     private function refreshToken(string $refreshToken): OAuthToken
     {
-        $URI = sprintf('https://api.lomonosov-msu.ru/oauth/v2/token?client_id=%s&client_secret=%s&refresh_token=%s&grant_type=refresh_token', $this->clientId, $this->clientSecret, $refreshToken);
+        $URI = sprintf('%s/oauth/v2/token?client_id=%s&client_secret=%s&refresh_token=%s&grant_type=refresh_token', $this->basePath, $this->clientId, $this->clientSecret, $refreshToken);
 
         return (new OAuthTokenFactory())->getToken($this->transport->get($URI));
     }
