@@ -10,5 +10,6 @@ use Psr\Http\Message\ResponseInterface;
 
 interface HTTPTransportInterface
 {
-    public function get(string $URI, $headers = []): ResponseInterface;
+    public function get(string $URI, array $headers = []): ResponseInterface;
+    public function post(string $URI, array $parameters = [], array $headers = []): ResponseInterface;
 }

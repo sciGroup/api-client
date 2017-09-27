@@ -8,7 +8,7 @@ namespace Sci\API\Client\Model\Request\Event;
 
 use Sci\API\Client\Model\Request\RequestInterface;
 
-class EventSearchRequest implements RequestInterface
+class EventSearchRequestParameters implements RequestInterface
 {
     /** @var string */
     public $locale;

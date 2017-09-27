@@ -7,7 +7,7 @@
 namespace Sci\API\Client;
 
 use Sci\API\Client\HTTPTransport\HTTPTransportInterface;
-use Sci\API\Client\Model\Request\Event\EventSearchRequest;
+use Sci\API\Client\Model\Request\Event\EventSearchRequestParameters;
 use Sci\API\Client\Model\ResponseTransformer\EventSearchResponseTransformer;
 use Sci\API\Client\Model\Wrapper\EventSearchResponseWrapper;
 use Sci\API\Client\Token\OAuthAuthenticator;
@@ -36,11 +36,51 @@ class Client
         $this->transport = $transport;
     }
 
-    public function eventSearch(EventSearchRequest $request): EventSearchResponseWrapper
+    /**
+     * Requires ROLE_OAUTH_SERVER
+     */
+    public function eventSearch(EventSearchRequestParameters $requestParameters): EventSearchResponseWrapper
     {
-        $rawResponse = $this->transport->get($request->getQueryString($this->basePath).'&access_token='.$this->authenticator->getToken());
-        $transformer = new EventSearchResponseTransformer();
+        $response = $this->transport->get($requestParameters->getQueryString($this->basePath).'&access_token='.$this->authenticator->getToken());
 
-        return $transformer->transform($rawResponse);
+        return (new EventSearchResponseTransformer())->transform($response);
+    }
+
+    /**
+     * Requires ROLE_OAUTH_TRUSTED_SERVER
+     *
+     * @param string $username
+     * @return string confirmation token
+     * @throws \Exception
+     */
+    public function requestPasswordResetting(string $username): string
+    {
+        $requestResettingURI = '/open-api/v1/rus/user/password/request-resetting?access_token='.$this->authenticator->getToken();
+        $response = $this->transport->post($requestResettingURI, ['username' => $username]);
+        $responseData = json_decode($response->getBody(), true);
+        if (!isset($responseData['confirmation_token'])) {
+            throw new \Exception('confirmation_token was not returned!');
+        }
+
+        return $responseData['confirmation_token'];
+    }
+
+    /**
+     * Requires ROLE_OAUTH_TRUSTED_SERVER
+     * @param string $username
+     * @param string $token
+     * @param string $newPassword
+     * @throws \Exception
+     */
+    public function resetPassword(string $username, string $token, string $newPassword)
+    {
+        $resetURI = sprintf('/open-api/v1/rus/user/confirmation-token/%s/password/reset?access_token=%s', $token, $this->authenticator->getToken());
+        $response = $this->transport->post($resetURI, [
+            'username' => $username,
+            'password' => $newPassword,
+        ]);
+        if (204 !== $response->getStatusCode()) {
+            throw new \Exception(sprintf('Can\'t set new password "%s" for user "%s" with token "%s"', $newPassword, $username, $token));
+        }
     }
 }
