@@ -55,7 +55,7 @@ class Client
      */
     public function requestPasswordResetting(string $username): string
     {
-        $requestResettingURI = '/open-api/v1/rus/user/password/request-resetting?access_token='.$this->authenticator->getToken();
+        $requestResettingURI = sprintf('%s/open-api/v1/rus/user/password/request-resetting?access_token=%s', $this->basePath, $this->authenticator->getToken());
         $response = $this->transport->post($requestResettingURI, ['username' => $username]);
         $responseData = json_decode($response->getBody(), true);
         if (!isset($responseData['confirmation_token'])) {
@@ -74,7 +74,7 @@ class Client
      */
     public function resetPassword(string $username, string $token, string $newPassword)
     {
-        $resetURI = sprintf('/open-api/v1/rus/user/confirmation-token/%s/password/reset?access_token=%s', $token, $this->authenticator->getToken());
+        $resetURI = sprintf('%s/open-api/v1/rus/user/confirmation-token/%s/password/reset?access_token=%s', $this->basePath, $token, $this->authenticator->getToken());
         $response = $this->transport->post($resetURI, [
             'username' => $username,
             'password' => $newPassword,
